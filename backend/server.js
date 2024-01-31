@@ -6,14 +6,18 @@ import connectToMongoDB from './db/mongoDB.config.js';
 
 const app = express();
 dotenv.config();
-
 const PORT = process.env.PORT || 4000;
 
+// Parse incoming requests with JSON payloads (from req.body)
+app.use(express.json());
+
+app.use('/api/auth', authRoutes);
+
+/*
 app.get('/', (req, res) => {
   res.send('<h1 style="color: #1DB954">instaChat</h1>');
 });
-
-app.use('/api/auth', authRoutes);
+*/
 
 app.listen(PORT, () => {
   connectToMongoDB();
