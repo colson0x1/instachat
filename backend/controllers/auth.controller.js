@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import User from '../models/user.model.js';
 
 export const signup = async (req, res) => {
@@ -14,25 +15,33 @@ export const signup = async (req, res) => {
       return res.status(400).json({ error: 'Username already exists' });
     }
 
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     const boyProfilePic = `https://avatar.iran.liara.run/publiv/boy?username=${username}`;
     const girlProfilePic = `https://avatar.iran.liara.run/publiv/girl?username=${username}`;
 
     const newUser = new User({
       fullName,
       username,
-      password,
+      password: hashedPassword,
       gender,
       profilePic: gender === 'male' ? boyProfilePic : girlProfilePic,
     });
 
-    await newUser.save();
+    if (newUser) {
+      await newUser.save();
 
-    res.status(201).json({
-      _id: newUser._id,
-      fullName: newUser.fullName,
-      username: newUser.username,
-      profilePic: newUser.profilePic,
-    });
+      res.status(201).json({
+        _id: newUser._id,
+        fullName: newUser.fullName,
+        username: newUser.username,
+        profilePic: newUser.profilePic,
+      });
+    } else {
+      res.send(400).json({ error: 'Invalid user data' });
+    }
   } catch (err) {
     console.log('Error in signup controller', err.message);
     res.status(500).json({ error: 'Internal Server Error' });
