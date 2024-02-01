@@ -50,8 +50,34 @@ export const signup = async (req, res) => {
   }
 };
 
-export const login = (req, res) => {
-  console.log('loginUser');
+export const login = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+    // if user doesn't exist, throws undefined and null so compare it with
+    // empty string so it doesn't throw error
+    // using empty string '' prevents Internal Server Error if user doesn't exist
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      user.password || '',
+    );
+
+    if (!user || !isPasswordCorrect) {
+      return res.status(400).json({ error: 'Invalid username or password' });
+    }
+
+    generateTokenAndSetCookie(user._id, res);
+
+    res.status(200).json({
+      _id: user._id,
+      fullName: user.fullName,
+      username: user.username,
+      profilePic: user.profilePic,
+    });
+  } catch (err) {
+    console.log('Error in login controller', err.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
 
 export const logout = (req, res) => {
