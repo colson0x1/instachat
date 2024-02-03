@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 
 import authRoutes from './routes/auth.routes.js';
 import messageRoutes from './routes/message.routes.js';
@@ -11,6 +12,8 @@ const PORT = process.env.PORT || 4000;
 
 // Parse incoming requests with JSON payloads (from req.body)
 app.use(express.json());
+// Parse incoming cookies from req.cookies
+app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/messages', messageRoutes);
