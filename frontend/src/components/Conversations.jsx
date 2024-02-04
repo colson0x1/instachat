@@ -1,4 +1,5 @@
 import useGetConversations from '../hooks/useGetConversations';
+import { getRandomEmoji } from '../utils/emojis';
 import Conversation from './Conversation';
 
 const Conversations = () => {
@@ -7,8 +8,14 @@ const Conversations = () => {
 
   return (
     <div className='py-2 flex flex-col overflow-auto'>
-      {conversations.map((conversation) => (
-        <Conversation key={conversation._id} conversation={conversation} />
+      {conversations.map((conversation, idx) => (
+        <Conversation
+          key={conversation._id}
+          conversation={conversation}
+          emoji={getRandomEmoji()}
+          // lastIndex so that divider line is not show at the last member in chat
+          lastIdx={idx === conversation.length - 1}
+        />
       ))}
 
       {loading ? (
