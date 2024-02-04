@@ -2,7 +2,7 @@ import User from '../models/user.model.js';
 
 export const getUsersForSidebar = async (req, res) => {
   try {
-    const loggedInUserId = req.user_id;
+    const loggedInUserId = req.user._id;
 
     // Get every users from the DB except the currenly logged in user
     // We don't want to load our profile in the users list on message dashboard
