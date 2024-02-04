@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import useLogin from '../../hooks/useLogin';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const { loading, login } = useLogin();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,7 +56,13 @@ const Login = () => {
           </Link>
 
           <div>
-            <button className='btn btn-block btn-sm mt-2'>Login</button>
+            <button className='btn btn-block btn-sm mt-2' disabled={loading}>
+              {loading ? (
+                <span className='loading loading-spinner'></span>
+              ) : (
+                'Login'
+              )}
+            </button>
           </div>
         </form>
       </div>
