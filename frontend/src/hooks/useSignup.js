@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useAuthContext } from '../context/AuthContext';
 
 const useSignup = () => {
   const [loading, setLoading] = useState(false);
+  const { setAuthUser } = useAuthContext();
 
   const signup = async ({
     fullName,
@@ -36,6 +38,17 @@ const useSignup = () => {
       });
 
       const data = await res.json();
+      if (data.err) {
+        throw new Error(data.err);
+      }
+
+      // Persist user to the local storage
+      // data is the object we return from the backend
+      localStorage.setItem('instaChat-user', JSON.stringify(data));
+
+      // Update the Context
+      setAuthUser(data);
+
       console.log(data);
     } catch (err) {
       toast.error(err.message);
