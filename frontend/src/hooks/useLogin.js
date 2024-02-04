@@ -19,8 +19,8 @@ const useLogin = () => {
       const data = await res.json();
 
       // If there's error in data, throw error so it will be caught up in catch
-      if (data.err) {
-        throw new Error(data.err);
+      if (data.error) {
+        throw new Error(data.error);
       }
 
       localStorage.setItem('instaChat-user', JSON.stringify(data));

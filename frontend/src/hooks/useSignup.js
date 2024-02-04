@@ -38,8 +38,8 @@ const useSignup = () => {
       });
 
       const data = await res.json();
-      if (data.err) {
-        throw new Error(data.err);
+      if (data.error) {
+        throw new Error(data.error);
       }
 
       // Persist user to the local storage
