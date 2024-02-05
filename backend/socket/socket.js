@@ -12,6 +12,11 @@ const io = new Server(server, {
   },
 });
 
+// gives user socket id when passed this receiver id
+export const getReceiverSocketId = (receiverId) => {
+  return userSocketMap[receiverId];
+};
+
 // { userId: socketId }
 const userSocketMap = {};
 
